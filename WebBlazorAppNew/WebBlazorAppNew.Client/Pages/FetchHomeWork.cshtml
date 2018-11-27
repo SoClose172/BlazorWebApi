@@ -1,0 +1,53 @@
+﻿   @using WebBlazorAppNew.Shared.Models  
+@page "/fetchhomework"  
+@inject HttpClient Http  
+  
+<h1>HomeWork Data</h1>  
+<p>This component demonstrates fetching HomeWork data from the server.</p>  
+<p>  
+    <a href="/addhomework">Create New</a>  
+</p>  
+@if (hmwList == null)  
+{      <p><em>Loading...</em></p>  
+}  
+else  
+{  
+    <table class='table'>  
+        <thead>  
+        <tr>  
+            <th>ID</th>  
+            <th>Name</th>  
+            <th>Block</th>  
+            <th>Rating</th>  
+            <th>Comment</th>  
+        </tr>  
+        </thead>  
+        <tbody>  
+        @foreach (var hmw in hmwList)  
+        {  
+            <tr>  
+                <td>@hmw.Id</td>  
+                <td>@hmw.Name</td>  
+                <td>@hmw.Block</td>  
+                <td>@hmw.Rating</td>  
+                <td>@hmw.Comment</td>  
+                <td>  
+                    <a href='/edithomework/@hmw.Id'>Edit</a>  |  
+                    <a href='/delete/@hmw.Id'>Delete</a>  
+                </td>  
+            </tr>  
+        }  
+        </tbody>  
+    </table>  
+}  
+  
+@functions {  
+    HomeWork[] hmwList;  
+    protected override async Task OnInitAsync()
+    {
+        //add await stroke
+        await Task.Delay(200);
+        hmwList = await Http.GetJsonAsync<HomeWork[]>  
+            ("/api/HomeWork/Index");  
+    }  
+}  
